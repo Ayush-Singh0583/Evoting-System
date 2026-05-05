@@ -20,20 +20,20 @@ const Voting: React.FC<Props> = ({ voter, booth, setReceipt, next }) => {
       let temp = [];
 
       // Fetch first 10 candidates (demo)
-      for (let i = 1; i <= 10; i++) {
-        try {
-          const c = await contract.getCandidate(i);
+      const count = await contract.candidateCount();
 
-          if (c[1] === voter.constituency) {
-            temp.push({
-              id: i,
-              name: c[0],
-              constituency: c[1],
-              votes: Number(c[2]),
-            });
-          }
-        } catch {
-          break;
+      for (let i = 0; i < Number(count); i++) {
+        const c = await contract.getCandidate(i);
+
+        console.log("Candidate:", c);
+
+        if (c[1].toString() === voter.constituency) {
+          temp.push({
+            id: i,
+            name: c[0],
+            constituency: c[1],
+            votes: Number(c[2]),
+          });
         }
       }
 
@@ -49,9 +49,7 @@ const Voting: React.FC<Props> = ({ voter, booth, setReceipt, next }) => {
     const contract = await getContract();
 
     // generate random receipt
-    const receipt = ethers.keccak256(
-      ethers.toUtf8Bytes(Date.now().toString())
-    );
+    const receipt = ethers.keccak256(ethers.toUtf8Bytes(Date.now().toString()));
 
     const tx = await contract.vote(selected, receipt);
     await tx.wait();

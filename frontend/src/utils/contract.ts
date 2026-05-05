@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import Voting from "../../../artifacts/contracts/Voting.sol/Voting.json";
 
-const CONTRACT_ADDRESS = "PASTE_YOUR_DEPLOYED_ADDRESS";
+const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS as string;
 
 export const getContract = async () => {
   if (!(window as any).ethereum) {
