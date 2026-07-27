@@ -9,9 +9,15 @@ const Results = () => {
     const loadResults = async () => {
       const contract = await getContract();
 
-      let temp = [];
+      if (!contract) {
+        setLoading(false);
+        return;
+      }
 
-      for (let i = 1; i <= 10; i++) {
+      let temp = [];
+      const count = await contract.candidateCount();
+
+      for (let i = 1; i <= Number(count); i++) {
         try {
           const c = await contract.getCandidate(i);
 

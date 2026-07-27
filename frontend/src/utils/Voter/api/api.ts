@@ -5,7 +5,7 @@ const API = axios.create({
 });
 
 export default API;
-const authUser = JSON.parse(localStorage.getItem('authUser') || '{}');
+const authUser = JSON.parse(localStorage.getItem('voter') || '{}');
 const token = authUser?.token;
 
 export const getWishlist = () =>

@@ -17,36 +17,46 @@ const Voting: React.FC<Props> = ({ voter, booth, setReceipt, next }) => {
 
   useEffect(() => {
     const loadCandidates = async () => {
-      const contract = await getContract();
+      try {
+        console.log("Loading candidates for booth:", booth);
+        const contract = await getContract();
 
-      let temp = [];
-
-      // Fetch first 10 candidates (demo)
-      console.log(contract);
-      const count = await contract.candidateCount();
-      console.log(count);
-
-      for (let i = 1; i < Number(count); i++) {
-        const c = await contract.getCandidate(i);
-
-        console.log("Candidate:", c);
-
-        if (c[1].toString() === voter.constituency) {
-          temp.push({
-            id: i,
-            name: c[0],
-            constituency: c[1],
-            votes: Number(c[2]),
-          });
+        if (!contract) {
+          console.error("Contract is undefined");
+          return;
         }
-      }
 
-      setCandidates(temp);
-      setLoading(false);
+        const temp = [];
+        const count = Number(await contract.candidateCount());
+
+        for (let i = 1; i <= count; i++) {
+  const [name, constituency, votes] = await contract.getCandidate(i);
+
+  console.log("Booth:", booth);
+  console.log("Candidate constituency:", constituency);
+  console.log("Match:", constituency === booth);
+
+  if (constituency === booth) {
+    temp.push({
+      id: i,
+      name,
+      constituency,
+      votes: Number(votes),
+    });
+  }
+}
+
+        setCandidates(temp);
+        console.log("Loaded candidates:", temp);
+      } catch (err) {
+        console.error("Failed to load candidates:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadCandidates();
-  }, []);
+  }, [booth]);
 
   const handleVote = async () => {
     if (selected === null) return;
@@ -55,6 +65,12 @@ const Voting: React.FC<Props> = ({ voter, booth, setReceipt, next }) => {
 
     try {
       const contract = await getContract();
+
+      if (!contract) {
+        console.error("Contract is undefined");
+        setSubmitting(false);
+        return;
+      }
 
       // generate random receipt
       const receipt = ethers.keccak256(

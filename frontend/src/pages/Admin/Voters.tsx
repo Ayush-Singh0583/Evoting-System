@@ -6,6 +6,7 @@ interface Voter {
   VoterId: string;
   name: string;
   email: string;
+  constituency: string;
   contact: string;
   Address: string;
   createdAt: string;
@@ -28,6 +29,7 @@ export default function Voters() {
     name: "",
     email: "",
     password: "",
+    constituency: "Bengaluru",
     contact: "",
     Address: "",
   });
@@ -65,6 +67,7 @@ export default function Voters() {
       name: "",
       email: "",
       password: "",
+      constituency: "Bengaluru",
       contact: "",
       Address: "",
     });
@@ -84,6 +87,7 @@ export default function Voters() {
       password: "",
       contact: voter.contact,
       Address: voter.Address,
+      constituency: voter.constituency,
     });
 
     setShowModal(true);
@@ -91,7 +95,7 @@ export default function Voters() {
 
   const submitForm = async () => {
     try {
-      if (!form.name || !form.email) {
+      if (!form.name || !form.email || !form.constituency) {
         return alert("Fill required fields");
       }
 
@@ -152,6 +156,7 @@ export default function Voters() {
               <th className="p-3 text-left">Voter ID</th>
               <th className="p-3 text-left">Name</th>
               <th className="p-3 text-left">Email</th>
+              <th className="p-3 text-left">Constituency</th>
               <th className="p-3 text-left">Contact</th>
               <th className="p-3 text-left">Address</th>
               <th className="p-3 text-center">Actions</th>
@@ -176,7 +181,7 @@ export default function Voters() {
 
                   <td className="p-3">{voter.email}</td>
 
-                  <td className="p-3">{voter.contact}</td>
+                  <td className="p-3">{voter.constituency}</td>
 
                   <td className="p-3">{voter.Address}</td>
 
@@ -279,6 +284,21 @@ export default function Voters() {
                 }
                 className="w-full border rounded-lg px-4 py-2"
               />
+
+              <select
+                value={form.constituency}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    constituency: e.target.value,
+                  })
+                }
+                className="w-full border rounded-lg px-4 py-2"
+              >
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Mumbai">Mumbai</option>
+              </select>
 
               <input
                 placeholder="Contact"

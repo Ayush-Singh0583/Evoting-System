@@ -18,3 +18,25 @@ node backend-api/utils/speakeasy.js
     organization: "Election Commission"
 }
 ```
+
+## Smart-contract setup
+### open a new terminal
+- keep this process alive
+
+```sh
+cd smart-contract
+
+npx hardhat node
+```
+
+## Open another terminal:
+
+```sh
+cd smart-contract
+
+npx hardhat compile
+
+npx hardhat ignition deploy ignition/modules/Voting.ts --network localhost
+
+npx hardhat console --network localhost
+```

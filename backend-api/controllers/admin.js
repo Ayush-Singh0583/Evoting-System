@@ -103,7 +103,7 @@ const generateVoterId = async () => {
 
 export const createVoter = async (req, res) => {
   try {
-    const { name, email, password, contact, Address } = req.body;
+    const { name, email, password, constituency, contact, Address } = req.body;
 
     const exists = await Voter.findOne({ email });
 
@@ -121,6 +121,7 @@ export const createVoter = async (req, res) => {
       name,
       email,
       password,
+      constituency,
       contact,
       Address,
     });

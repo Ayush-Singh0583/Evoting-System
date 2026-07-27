@@ -22,6 +22,8 @@ npx hardhat node
 👉 Open console in new terminal:
 
 ```sh
+npx hardhat compile
+
 npx hardhat ignition deploy ignition/modules/Voting.ts --network localhost
 
 npx hardhat console --network localhost

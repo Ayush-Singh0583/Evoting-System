@@ -14,7 +14,10 @@ export const loginVoter = async (req, res) => {
       VoterId: voter.VoterId,
       name: voter.name,
       email: voter.email,
-      token: generateVoterAuthToken(voter._id),
+      constituency: voter.constituency,
+      contact: voter.contact,
+      Address: voter.Address,
+      token: generateVoterAuthToken(voter._id)
     });
   } else {
     res.status(401).json({ message: 'Invalid email or password' });

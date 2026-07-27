@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("authUser");
+    const storedUser = sessionStorage.getItem("voterObject");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -31,12 +31,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (userData: Voter) => {
     setUser(userData);
-    localStorage.setItem("authUser", JSON.stringify(userData));
+    sessionStorage.setItem("voterObject", JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("authUser");
+    sessionStorage.removeItem("voterObject");
   };
 
   return (

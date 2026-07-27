@@ -1,5 +1,4 @@
 import { useState } from "react";
-import BoothSelect from "../components/BoothSelect";
 import Voting from "../components/Voting";
 import Confirm from "../components/Confirm";
 import Verify from "../components/Verify";
@@ -7,20 +6,18 @@ import Results from "../components/Results";
 
 export default function Home() {
   const [step, setStep] = useState(0);
-  const [booth, setBooth] = useState("");
   const [receipt, setReceipt] = useState("");
   const [activeTab, setActiveTab] = useState<"vote" | "verify" | "results">(
     "vote"
   );
 
-  const voter = localStorage.getItem("authUser")
-    ? JSON.parse(localStorage.getItem("authUser")!)
+  const voter = sessionStorage.getItem("voterObject")
+    ? JSON.parse(sessionStorage.getItem("voterObject")!)
     : null;
 
   const votingSteps = [
-    { label: "Select Booth", icon: "📍" },
     { label: "Cast Vote", icon: "🗳️" },
-    { label: "Confirmation", icon: "✅" },
+    { label: "Confirmation", icon: "✅" }
   ];
 
   const getStepState = (index: number) => {
@@ -32,8 +29,8 @@ export default function Home() {
   const handleTabChange = (tab: "vote" | "verify" | "results") => {
     setActiveTab(tab);
     if (tab === "vote") setStep(1);
-    else if (tab === "verify") setStep(4);
-    else setStep(5);
+    else if (tab === "verify") setStep(3);
+    else setStep(4);
   };
 
   const tabClass = (isActive: boolean) =>
@@ -179,29 +176,23 @@ export default function Home() {
 
           {step === 1 && (
             <div className="animate-fade-in-up">
-              <BoothSelect setBooth={setBooth} next={() => setStep(2)} />
+              <Voting voter={voter} booth={voter.constituency} setReceipt={setReceipt} next={() => setStep(2)} />
             </div>
           )}
 
           {step === 2 && (
             <div className="animate-fade-in-up">
-              <Voting voter={voter} booth={booth} setReceipt={setReceipt} next={() => setStep(3)} />
+              <Confirm receipt={receipt} />
             </div>
           )}
 
           {step === 3 && (
             <div className="animate-fade-in-up">
-              <Confirm receipt={receipt} />
-            </div>
-          )}
-
-          {step === 4 && (
-            <div className="animate-fade-in-up">
               <Verify />
             </div>
           )}
 
-          {step === 5 && (
+          {step === 4 && (
             <div className="animate-fade-in-up">
               <Results />
             </div>
