@@ -6,7 +6,7 @@
 
 ## 🔹 1. Voter Login
 
-* Voter enters system (dummy login)
+* Voter enters system
 * System knows:
 
   * name

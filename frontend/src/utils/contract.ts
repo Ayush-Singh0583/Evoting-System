@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import Voting from "../../../artifacts/contracts/Voting.sol/Voting.json";
+import Voting from "../../../smart-contract/artifacts/contracts/Voting.sol/Voting.json";
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS as string;
 
