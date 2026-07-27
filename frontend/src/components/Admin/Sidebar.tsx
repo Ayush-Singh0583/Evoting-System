@@ -1,16 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
-  Library,
   Network,
-  School,
-  BookOpen,
-  GraduationCap,
-  CalendarClock,
   User,
   LogOut,
   FileText,
-  Computer,
+  Settings
 } from "lucide-react";
 import { adminLogout } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
@@ -39,29 +34,10 @@ export default function Sidebar({ isOpen, onClose, setIsAuthenticated }: Sidebar
   const location = useLocation();
 
   const navItems = [
-    { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard size={20} /> },
-    { label: "Semesters", href: "/semesters", icon: <Library size={20} /> },
-    { label: "Branches", href: "/branches", icon: <Network size={20} /> },
-    { label: "Sections", href: "/sections", icon: <School size={20} /> },
-    { label: "Subjects", href: "/subjects", icon: <BookOpen size={20} /> },
-    { label: "Faculty", href: "/faculty", icon: <GraduationCap size={20} /> },
-    {
-      label: "Timetable Creation",
-      href: "/timetable",
-      icon: <CalendarClock size={20} />,
-    },
-    {
-      label: "Student Timetable",
-      href: "/student-timetable",
-      icon: <CalendarClock size={20} />,
-    },
-    {
-      label: "Faculty Timetable",
-      href: "/faculty-timetable",
-      icon: <CalendarClock size={20} />,
-    },
-    { label: "Workload", href: "/workload", icon: <CalendarClock size={20} /> },
-    { label: "Labs", href: "/labs", icon: <Computer size={20} /> },
+    { label: "Dashboard", href: "/admin/dashboard", icon: <LayoutDashboard size={20} /> },
+    { label: "Voters", href: "/admin/Voters", icon: <User size={20} /> },
+    { label: "Candidates", href: "/admin/Candidates", icon: <Network size={20} /> },
+    { label: "Settings", href: "/admin/Settings", icon: <Settings size={20} /> }
   ];
 
   return (

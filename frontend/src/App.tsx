@@ -12,6 +12,9 @@ import Header from "./components/Admin/Header";
 // User Imports
 import { LandingPage } from "./pages/LandingPage";
 import Home from "./pages/Home";
+import Voters from "./pages/Admin/Voters";
+import Candidates from "./pages/Admin/Candidates";
+import Settings from "./pages/Admin/Settings";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -56,6 +59,9 @@ function App() {
               {/* PROTECTED */}
               <Route path="/admin" element={<AdminRoute />}>
                 <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="voters" element={<Voters />} />
+                <Route path="candidates" element={<Candidates />} />
+                <Route path="settings" element={<Settings />} />
               </Route>
             </Routes>
           </main>
