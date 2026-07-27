@@ -22,11 +22,11 @@ const Voting: React.FC<Props> = ({ voter, booth, setReceipt, next }) => {
       let temp = [];
 
       // Fetch first 10 candidates (demo)
-      console.log(contract)
+      console.log(contract);
       const count = await contract.candidateCount();
-      console.log(count)
+      console.log(count);
 
-      for (let i = 0; i < Number(count); i++) {
+      for (let i = 1; i < Number(count); i++) {
         const c = await contract.getCandidate(i);
 
         console.log("Candidate:", c);
@@ -58,7 +58,7 @@ const Voting: React.FC<Props> = ({ voter, booth, setReceipt, next }) => {
 
       // generate random receipt
       const receipt = ethers.keccak256(
-        ethers.toUtf8Bytes(Date.now().toString())
+        ethers.toUtf8Bytes(Date.now().toString()),
       );
 
       const tx = await contract.vote(selected, receipt);
@@ -73,123 +73,229 @@ const Voting: React.FC<Props> = ({ voter, booth, setReceipt, next }) => {
   };
 
   return (
-    <div>
-      {/* Section Header */}
-      <div className="section-header">
-        <div className="section-icon" aria-hidden="true">
-          🗳️
-        </div>
-        <div className="section-header-text">
-          <h2>Cast Your Vote</h2>
-          <p>Select your preferred candidate below</p>
+    <div className="space-y-8">
+      {/* Header */}
+
+      <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white shadow-lg">
+        <div className="flex items-center gap-5">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 text-4xl">
+            🗳️
+          </div>
+
+          <div>
+            <h2 className="text-3xl font-bold">Cast Your Vote</h2>
+
+            <p className="mt-2 text-blue-100">
+              Select one candidate for your constituency.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Context Bar */}
-      <div className="voting-context" id="voting-context">
-        <span>📍 {booth}</span>
-        <span className="voting-context-divider"></span>
-        <span>🏛️ Constituency: {voter.constituency}</span>
+      {/* Context */}
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="rounded-2xl border bg-white p-5 shadow-sm">
+          <p className="text-sm text-slate-500">Booth</p>
+
+          <h3 className="mt-2 text-xl font-semibold text-slate-800">
+            📍 {booth}
+          </h3>
+        </div>
+
+        <div className="rounded-2xl border bg-white p-5 shadow-sm">
+          <p className="text-sm text-slate-500">Constituency</p>
+
+          <h3 className="mt-2 text-xl font-semibold text-slate-800">
+            🏛️ {voter.constituency}
+          </h3>
+        </div>
       </div>
 
       {/* Candidate List */}
-      <div className="candidate-list" id="candidate-list">
-        {loading ? (
-          // Skeleton loading cards
-          <>
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className={`candidate-card animate-fade-in-up stagger-${i}`}
-                style={{ pointerEvents: "none" }}
-              >
-                <div className="candidate-radio">
-                  <div className="candidate-radio-dot"></div>
-                </div>
-                <div className="candidate-info">
-                  <div
-                    className="skeleton"
-                    style={{ width: "140px", height: "18px", marginBottom: "6px" }}
-                  ></div>
-                  <div
-                    className="skeleton"
-                    style={{ width: "100px", height: "14px" }}
-                  ></div>
+
+      <div className="space-y-4">
+        {loading &&
+          [1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="animate-pulse rounded-2xl border bg-white p-6 shadow-sm"
+            >
+              <div className="flex items-center gap-5">
+                <div className="h-8 w-8 rounded-full bg-slate-200" />
+
+                <div className="flex-1">
+                  <div className="mb-3 h-5 w-48 rounded bg-slate-200" />
+
+                  <div className="h-4 w-32 rounded bg-slate-100" />
                 </div>
               </div>
-            ))}
-          </>
-        ) : candidates.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-state-icon">🔍</div>
-            <p className="empty-state-text">
-              No candidates found for {voter.constituency}
+            </div>
+          ))}
+
+        {!loading && candidates.length === 0 && (
+          <div className="rounded-2xl border bg-white p-16 text-center shadow">
+            <div className="mb-5 text-6xl">🔍</div>
+
+            <h2 className="text-2xl font-semibold text-slate-700">
+              No Candidates Found
+            </h2>
+
+            <p className="mt-3 text-slate-500">
+              No candidates are available for
+              <span className="font-semibold"> {voter.constituency}</span>
             </p>
           </div>
-        ) : (
-          candidates.map((c, i) => (
-            <div
-              key={c.id}
-              className={`candidate-card animate-fade-in-up stagger-${i + 1} ${
-                selected === c.id ? "selected" : ""
-              }`}
-              onClick={() => setSelected(c.id)}
-              role="radio"
-              aria-checked={selected === c.id}
-              tabIndex={0}
-              id={`candidate-${c.id}`}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setSelected(c.id);
-                }
-              }}
-            >
-              <div className="candidate-radio">
-                <div className="candidate-radio-dot"></div>
-              </div>
-              <div className="candidate-info">
-                <p className="candidate-name">{c.name}</p>
-                <p className="candidate-constituency">{c.constituency}</p>
-              </div>
-              {selected === c.id && (
-                <span
-                  className="badge badge-accent animate-fade-in"
-                  style={{ marginLeft: "auto" }}
-                >
-                  Selected
-                </span>
-              )}
-            </div>
-          ))
         )}
+
+        {!loading &&
+          candidates.map((candidate) => (
+            <button
+              key={candidate.id}
+              type="button"
+              onClick={() => setSelected(candidate.id)}
+              className={`w-full rounded-2xl border p-6 text-left transition-all duration-300
+
+            ${
+              selected === candidate.id
+                ? "border-blue-600 bg-blue-50 shadow-lg ring-2 ring-blue-200"
+                : "border-slate-200 bg-white hover:border-blue-300 hover:shadow-md"
+            }
+
+            `}
+            >
+              <div className="flex items-center">
+                <div
+                  className={`mr-5 flex h-8 w-8 items-center justify-center rounded-full border-2
+
+                ${
+                  selected === candidate.id
+                    ? "border-blue-600 bg-blue-600 text-white"
+                    : "border-slate-300"
+                }
+
+                `}
+                >
+                  {selected === candidate.id ? "✓" : ""}
+                </div>
+
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-slate-800">
+                    {candidate.name}
+                  </h3>
+
+                  <p className="mt-1 text-slate-500">
+                    {candidate.constituency}
+                  </p>
+                </div>
+
+                {selected === candidate.id && (
+                  <span className="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white">
+                    Selected
+                  </span>
+                )}
+              </div>
+            </button>
+          ))}
       </div>
 
-      {/* Submit Button */}
+      {/* Bottom Action */}
+
       {!loading && candidates.length > 0 && (
-        <button
-          onClick={handleVote}
-          className={`btn btn-primary btn-lg ${
-            selected === null ? "" : ""
-          }`}
-          disabled={selected === null || submitting}
-          id="confirm-vote-btn"
-          style={{
-            width: "100%",
-            opacity: selected === null ? 0.5 : 1,
-            cursor: selected === null ? "not-allowed" : "pointer",
-          }}
-        >
-          {submitting ? (
-            <>
-              <div className="spinner"></div>
-              Submitting to Blockchain...
-            </>
-          ) : (
-            <>🗳️ Confirm Vote</>
-          )}
-        </button>
+        <div className="mt-10 rounded-3xl border border-slate-200 bg-slate-50 p-8">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            {/* Selected Candidate */}
+
+            <div>
+              <p className="text-sm uppercase tracking-wide text-slate-500">
+                Selected Candidate
+              </p>
+
+              {selected === null ? (
+                <h2 className="mt-2 text-2xl font-semibold text-slate-400">
+                  No candidate selected
+                </h2>
+              ) : (
+                <>
+                  <h2 className="mt-2 text-2xl font-bold text-slate-800">
+                    {candidates.find((c) => c.id === selected)?.name}
+                  </h2>
+
+                  <p className="mt-1 text-slate-500">
+                    {candidates.find((c) => c.id === selected)?.constituency}
+                  </p>
+                </>
+              )}
+            </div>
+
+            {/* Vote Button */}
+
+            <button
+              onClick={handleVote}
+              disabled={selected === null || submitting}
+              className={`flex min-w-[240px] items-center justify-center gap-3 rounded-2xl px-8 py-4 text-lg font-semibold transition-all duration-300
+
+            ${
+              selected === null || submitting
+                ? "cursor-not-allowed bg-slate-300 text-slate-500"
+                : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg hover:scale-105 hover:shadow-2xl"
+            }
+
+            `}
+            >
+              {submitting ? (
+                <>
+                  <svg
+                    className="h-6 w-6 animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8z"
+                    />
+                  </svg>
+                  Submitting...
+                </>
+              ) : (
+                <>🗳️ Confirm Vote</>
+              )}
+            </button>
+          </div>
+        </div>
       )}
+
+      {/* Security Notice */}
+
+      <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
+        <div className="flex items-start gap-4">
+          <div className="text-4xl">🔒</div>
+
+          <div>
+            <h3 className="text-lg font-bold text-green-800">
+              Your vote is secure
+            </h3>
+
+            <p className="mt-2 leading-7 text-green-700">
+              Once submitted, your vote will be signed, recorded on the Ethereum
+              blockchain, and cannot be modified. After the transaction is
+              confirmed, you'll receive a unique receipt that can later be used
+              to verify your vote without revealing your chosen candidate.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

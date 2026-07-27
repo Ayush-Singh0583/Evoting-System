@@ -22,9 +22,7 @@ const Verify = () => {
         setResult("Your vote has been recorded and verified on the blockchain.");
         setVerified(true);
       } else {
-        setResult(
-          "No vote found with this receipt. Please check and try again."
-        );
+        setResult("No vote found with this receipt. Please check and try again.");
         setVerified(false);
       }
     } catch (err) {
@@ -36,24 +34,24 @@ const Verify = () => {
   };
 
   return (
-    <div>
-      {/* Section Header */}
-      <div className="section-header">
-        <div className="section-icon" aria-hidden="true">
-          🔍
-        </div>
-        <div className="section-header-text">
-          <h2>Verify Your Vote</h2>
-          <p>Enter your receipt ID to confirm your vote was counted</p>
+    <div className="space-y-8">
+      <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white text-3xl shadow">
+            🔍
+          </div>
+          <div>
+            <h2 className="text-3xl font-semibold text-slate-900">Verify Your Vote</h2>
+            <p className="mt-2 text-slate-600">Enter your receipt ID to confirm your vote was counted.</p>
+          </div>
         </div>
       </div>
 
-      {/* Input Group */}
-      <div className="verify-input-group" id="verify-form">
+      <div className="grid gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-[1fr_auto]" id="verify-form">
         <input
           type="text"
           placeholder="Paste your receipt ID here (0x...)"
-          className="input"
+          className="min-w-0 rounded-3xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           value={receipt}
           onChange={(e) => setReceipt(e.target.value)}
           onKeyDown={(e) => {
@@ -64,73 +62,39 @@ const Verify = () => {
         />
         <button
           onClick={handleVerify}
-          className="btn btn-success"
+          className="inline-flex min-w-[140px] items-center justify-center rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-sm font-semibold text-white transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={loading || !receipt.trim()}
-          style={{
-            opacity: !receipt.trim() ? 0.5 : 1,
-            cursor: !receipt.trim() ? "not-allowed" : "pointer",
-            minWidth: "120px",
-          }}
           id="verify-btn"
         >
-          {loading ? (
-            <div className="spinner"></div>
-          ) : (
-            <>🛡️ Verify</>
-          )}
+          {loading ? "Verifying…" : "🛡️ Verify"}
         </button>
       </div>
 
-      {/* Result */}
       {result && (
         <div
-          className={`verify-result ${verified ? "success" : "error"}`}
+          className={`rounded-3xl border px-6 py-5 shadow-sm ${verified ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-rose-200 bg-rose-50 text-rose-900"}`}
           id="verify-result"
           role="alert"
         >
-          <span className="verify-result-icon" aria-hidden="true">
-            {verified ? "✅" : "❌"}
-          </span>
-          <div>
-            <p style={{ fontWeight: 600, marginBottom: "2px" }}>
-              {verified ? "Vote Verified" : "Not Found"}
-            </p>
-            <p
-              style={{
-                fontSize: "0.8125rem",
-                opacity: 0.85,
-                fontWeight: 400,
-              }}
-            >
-              {result}
-            </p>
+          <div className="flex items-start gap-4">
+            <span className="mt-1 text-2xl" aria-hidden="true">
+              {verified ? "✅" : "❌"}
+            </span>
+            <div>
+              <p className="font-semibold">{verified ? "Vote Verified" : "Not Found"}</p>
+              <p className="mt-1 text-sm leading-6 opacity-90">{result}</p>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Privacy Note */}
-      <div
-        style={{
-          marginTop: "24px",
-          padding: "14px 18px",
-          background: "var(--bg-surface)",
-          border: "1px solid var(--border)",
-          borderRadius: "var(--radius-md)",
-          display: "flex",
-          alignItems: "flex-start",
-          gap: "10px",
-          fontSize: "0.8125rem",
-          color: "var(--text-secondary)",
-          lineHeight: "1.5",
-        }}
-      >
-        <span style={{ flexShrink: 0, fontSize: "1rem" }} aria-hidden="true">
-          🔒
-        </span>
-        <span>
-          <strong>Privacy preserved.</strong> Verification only confirms that
-          your vote exists — it does not reveal which candidate you voted for.
-        </span>
+      <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-sm text-slate-600 shadow-sm">
+        <div className="flex items-start gap-3">
+          <span className="mt-1 text-2xl">🔒</span>
+          <p>
+            <span className="font-semibold">Privacy preserved.</span> Verification only confirms that your vote exists — it does not reveal which candidate you voted for.
+          </p>
+        </div>
       </div>
     </div>
   );

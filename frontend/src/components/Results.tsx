@@ -26,7 +26,6 @@ const Results = () => {
         }
       }
 
-      // Sort by votes descending
       temp.sort((a, b) => b.votes - a.votes);
       setCandidates(temp);
       setLoading(false);
@@ -39,118 +38,73 @@ const Results = () => {
   const totalVotes = candidates.reduce((sum, c) => sum + c.votes, 0);
 
   return (
-    <div>
-      {/* Section Header */}
-      <div className="section-header">
-        <div className="section-icon" aria-hidden="true">
-          📊
-        </div>
-        <div className="section-header-text">
-          <h2>Election Results</h2>
-          <p>
-            Live results from the blockchain
-            {!loading && totalVotes > 0 && (
-              <span style={{ marginLeft: "8px" }}>
-                •{" "}
-                <strong style={{ color: "var(--text-primary)" }}>
-                  {totalVotes}
-                </strong>{" "}
-                total votes
-              </span>
-            )}
-          </p>
+    <div className="space-y-8">
+      <div className="rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white text-3xl shadow">
+            📊
+          </div>
+          <div>
+            <h2 className="text-3xl font-semibold text-slate-900">Election Results</h2>
+            <p className="mt-2 text-slate-600">
+              Live results from the blockchain
+              {!loading && totalVotes > 0 && (
+                <span className="ml-2 text-sm font-semibold text-slate-900">• {totalVotes} total votes</span>
+              )}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Results List */}
-      <div className="results-grid" id="results-grid">
+      <div className="grid gap-5 md:grid-cols-2" id="results-grid">
         {loading ? (
-          // Skeleton loading
-          <>
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className={`result-card animate-fade-in-up stagger-${i}`}
-              >
-                <div className="result-card-header">
-                  <div className="result-candidate-info">
-                    <div
-                      className="skeleton"
-                      style={{ width: "32px", height: "32px" }}
-                    ></div>
-                    <div>
-                      <div
-                        className="skeleton"
-                        style={{
-                          width: "120px",
-                          height: "16px",
-                          marginBottom: "6px",
-                        }}
-                      ></div>
-                      <div
-                        className="skeleton"
-                        style={{ width: "80px", height: "12px" }}
-                      ></div>
-                    </div>
-                  </div>
+          [1, 2, 3].map((i) => (
+            <div key={i} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex items-center gap-4">
+                <div className="h-10 w-10 rounded-2xl bg-slate-200" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-32 rounded-full bg-slate-200" />
+                  <div className="h-3 w-20 rounded-full bg-slate-200" />
                 </div>
-                <div
-                  className="skeleton"
-                  style={{ width: "100%", height: "6px", marginTop: "4px" }}
-                ></div>
               </div>
-            ))}
-          </>
+              <div className="mt-4 h-2 rounded-full bg-slate-200" />
+            </div>
+          ))
         ) : candidates.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-state-icon">📭</div>
-            <p className="empty-state-text">
-              No results available yet. Check back after voting.
-            </p>
+          <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+            <div className="text-5xl">📭</div>
+            <p className="mt-4 text-lg font-semibold text-slate-900">No results available yet.</p>
+            <p className="mt-2 text-sm text-slate-500">Check back after voting.</p>
           </div>
         ) : (
           candidates.map((c, i) => (
             <div
               key={c.id}
-              className={`result-card animate-fade-in-up stagger-${i + 1} ${
-                i === 0 && c.votes > 0 ? "winner" : ""
-              }`}
+              className={`rounded-3xl border p-6 shadow-sm transition ${i === 0 && c.votes > 0 ? "border-amber-200 bg-amber-50" : "border-slate-200 bg-white"}`}
               id={`result-${c.id}`}
             >
-              <div className="result-card-header">
-                <div className="result-candidate-info">
-                  <div className="result-rank">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-3xl bg-slate-100 text-lg font-semibold text-slate-900">
                     {i === 0 && c.votes > 0 ? "👑" : i + 1}
                   </div>
                   <div>
-                    <p className="result-candidate-name">{c.name}</p>
-                    <p className="result-candidate-constituency">
-                      {c.constituency}
-                    </p>
+                    <p className="text-lg font-semibold text-slate-900">{c.name}</p>
+                    <p className="text-sm text-slate-500">{c.constituency}</p>
                   </div>
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <p className="result-votes">{c.votes}</p>
-                  <p
-                    style={{
-                      fontSize: "0.75rem",
-                      color: "var(--text-muted)",
-                    }}
-                  >
-                    {totalVotes > 0
-                      ? `${((c.votes / totalVotes) * 100).toFixed(1)}%`
-                      : "0%"}
+                <div className="text-right">
+                  <p className="text-2xl font-semibold text-slate-900">{c.votes}</p>
+                  <p className="text-sm text-slate-500">
+                    {totalVotes > 0 ? `${((c.votes / totalVotes) * 100).toFixed(1)}%` : "0%"}
                   </p>
                 </div>
               </div>
-              <div className="result-bar-track">
+              <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-200">
                 <div
-                  className="result-bar-fill"
-                  style={{
-                    width: `${maxVotes > 0 ? (c.votes / maxVotes) * 100 : 0}%`,
-                    animationDelay: `${i * 0.1}s`,
-                  }}
-                ></div>
+                  className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
+                  style={{ width: `${maxVotes > 0 ? (c.votes / maxVotes) * 100 : 0}%` }}
+                />
               </div>
             </div>
           ))

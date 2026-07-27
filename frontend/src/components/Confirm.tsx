@@ -9,7 +9,6 @@ const Confirm = ({ receipt }: { receipt: string }) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback for older browsers
       const textarea = document.createElement("textarea");
       textarea.value = receipt;
       document.body.appendChild(textarea);
@@ -22,79 +21,42 @@ const Confirm = ({ receipt }: { receipt: string }) => {
   };
 
   return (
-    <div className="confirm-container" id="confirm-screen">
-      {/* Animated Checkmark */}
-      <div className="success-checkmark">
-        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            className="check-path"
-            d="M14 27l8 8 16-16"
-            stroke="currentColor"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-
-      {/* Success Text */}
-      <h2 className="confirm-title">Vote Recorded Successfully</h2>
-      <p className="confirm-subtitle">
-        Your vote has been securely stored on the Ethereum blockchain.
-      </p>
-
-      {/* Receipt Card */}
-      <div className="receipt-card" id="receipt-card">
-        <div style={{ textAlign: "left" }}>
-          <p
-            style={{
-              fontSize: "0.75rem",
-              color: "var(--text-muted)",
-              marginBottom: "4px",
-              fontWeight: 600,
-              textTransform: "uppercase" as const,
-              letterSpacing: "0.05em",
-            }}
-          >
-            Receipt ID
-          </p>
-          <p className="receipt-hash">{receipt}</p>
+    <div className="space-y-8">
+      <div className="rounded-3xl border border-slate-200 bg-white p-10 shadow-xl">
+        <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-emerald-100 text-4xl text-emerald-700">
+          ✅
         </div>
-        <button
-          className="copy-btn"
-          onClick={handleCopy}
-          title={copied ? "Copied!" : "Copy to clipboard"}
-          aria-label="Copy receipt to clipboard"
-          id="copy-receipt-btn"
-        >
-          {copied ? "✓" : "📋"}
-        </button>
-      </div>
+        <div className="mt-8 text-center">
+          <h2 className="text-3xl font-semibold text-slate-900">Vote Recorded Successfully</h2>
+          <p className="mt-3 text-slate-600">Your vote has been securely stored on the Ethereum blockchain.</p>
+        </div>
 
-      {/* Info Note */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          gap: "10px",
-          padding: "14px 18px",
-          background: "var(--accent-bg)",
-          border: "1px solid var(--border-accent)",
-          borderRadius: "var(--radius-md)",
-          textAlign: "left",
-          fontSize: "0.8125rem",
-          color: "var(--text-accent)",
-          lineHeight: "1.5",
-        }}
-      >
-        <span style={{ flexShrink: 0, fontSize: "1rem" }} aria-hidden="true">
-          💡
-        </span>
-        <span>
-          Save this receipt ID. You can use it to verify your vote was counted
-          without revealing your identity. Go to the{" "}
-          <strong>Verify</strong> tab to check anytime.
-        </span>
+        <div className="mt-10 rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm" id="receipt-card">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Receipt ID</p>
+              <p className="mt-2 break-words text-sm font-medium text-slate-900">{receipt}</p>
+            </div>
+            <button
+              className="inline-flex h-12 items-center justify-center rounded-2xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800"
+              onClick={handleCopy}
+              title={copied ? "Copied!" : "Copy to clipboard"}
+              aria-label="Copy receipt to clipboard"
+              id="copy-receipt-btn"
+            >
+              {copied ? "✓ Copied" : "📋 Copy"}
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-3xl border border-emerald-100 bg-emerald-50 p-6 text-slate-700">
+          <div className="flex items-start gap-3">
+            <span className="mt-1 text-2xl">💡</span>
+            <p className="text-sm leading-6">
+              Save this receipt ID. You can use it to verify your vote was counted without revealing your identity. Go to the <strong>Verify</strong> tab to check anytime.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
