@@ -32,7 +32,7 @@ export default function Header({ onMenuClick, isAuthenticated }: HeaderProps) {
           <>
             <div className="ml-auto">
               <Link
-                to="/dashboard"
+                to="/admin/dashboard"
                 className="p-2 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors flex items-center gap-2"
                 title="Go to Dashboard"
               >

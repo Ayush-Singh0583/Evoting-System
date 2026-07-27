@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // Admin Imports
 import Sidebar from "./components/Admin/Sidebar";
@@ -8,13 +8,15 @@ import AdminRoute from "./components/Admin/AdminRoute";
 import AdminLogin from "./pages/Admin/Login";
 import AdminDashboard from "./pages/Admin/Dashboard";
 import Header from "./components/Admin/Header";
-
-// User Imports
-import { LandingPage } from "./pages/LandingPage";
-import Home from "./pages/Home";
 import Voters from "./pages/Admin/Voters";
 import Candidates from "./pages/Admin/Candidates";
 import Settings from "./pages/Admin/Settings";
+
+// Voter Imports
+import { LandingPage } from "./pages/LandingPage";
+import Home from "./pages/Home";
+import VoterLogin from "./pages/Voter/Login";
+import ProtectedRoute from "./components/Voter/ProtectedRoute";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -47,9 +49,12 @@ function App() {
           )}
           <main className="flex-1 w-full p-0">
             <Routes>
-              {/* User Routes */}
+              {/* Voter Routes */}
               <Route path="/" element={<LandingPage />} />
-              <Route path="/home" element={<Home />} />
+              <Route path="/login" element={<VoterLogin />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/home" element={<Home />} />
+              </Route>
 
               {/* Admin Routes */}
               <Route

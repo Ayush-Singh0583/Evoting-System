@@ -7,7 +7,7 @@ import {
   FileText,
   Settings
 } from "lucide-react";
-import { adminLogout } from "../../api/auth";
+import { adminLogout } from "../../utils/Admin/api/auth";
 import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {

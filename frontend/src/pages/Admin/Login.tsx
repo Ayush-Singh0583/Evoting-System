@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { adminLogin } from "../../api/auth";
+import { adminLogin } from "../../utils/Admin/api/auth";
 import { useNavigate, Navigate } from "react-router-dom";
 
 export default function AdminLogin({ setIsAuthenticated }: { setIsAuthenticated: (value: boolean) => void }) {
