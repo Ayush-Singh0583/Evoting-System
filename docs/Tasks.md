@@ -1,11 +1,6 @@
-Admin auth
-admin dashboard - rafc
-commit
+pages left to build
 
-voter auth
-move current voting page to /home 
-commit
+1. admin settings - show admin details
+2. voting results - public page
 
-modify voting.sol to verify uuid/ aadhar id so that we can only be able to say that the voter has already voted
-
-1. change voter auth token from localstorage to sessionstorage
+update ui everywhere
